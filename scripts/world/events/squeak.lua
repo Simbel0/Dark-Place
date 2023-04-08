@@ -5,7 +5,11 @@ function Squeak:init(data)
 end
 
 function Squeak:onInteract(player, dir)
-    Assets.playSound("squeak")
+    if not Game.inventory:hasItem("sfb_key") then
+        Assets.playSound("squeak")
+    else
+        Game.world:startCutscene("falling_skies.smw_secret_exit", self)
+    end
     return true
 end
 
