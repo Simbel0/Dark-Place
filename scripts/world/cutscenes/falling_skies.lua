@@ -31,11 +31,11 @@ return {
 			keyhole:setLayer(YOU.layer - 0.1)
 			Game.world:addChild(keyhole)
 
-			local outline = Sprite("world/keyhole_outlines", 0, 0)
+			--[[local outline = Sprite("world/keyhole_outline", 0, 0)
 			--outline:setOrigin(0.5, 1)
 			--outline:setScaleOrigin(0.5, 1)
-			outline:setLayer(keyhole.layer)
-			keyhole:addChild(outline)
+			outline:setLayer(keyhole.layer + 0.1)
+			keyhole:addChild(outline)]]
 
 			Assets.playSound("keyhole")
 
