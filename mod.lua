@@ -142,13 +142,17 @@ end
 modRequire("scripts/main/warp_bin")
 modRequire("scripts/main/debugsystem")
 
+function Mod:getPartyMemberIfInParty(chara)
+    return Game:hasPartyMember(chara) and Game:getPartyMember(chara) or nil
+end
+
 function Mod:getKris()
     local YOU = Game:getPartyMember("YOU")
     local kris = Game:getPartyMember("kris")
     if Game:hasPartyMember(YOU) then return YOU
     elseif Game:hasPartyMember(kris) then return kris
+    else return Game:getPartyMember(Game.party[1].id)
     end
-    return nil
 end
 
 function Mod:getKrisCharacter()
