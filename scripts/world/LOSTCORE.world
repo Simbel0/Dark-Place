@@ -1,0 +1,27 @@
+{
+    "maps": [
+        {
+            "fileName": "maps/lostcore/first_room.tmx",
+            "height": 480,
+            "width": 1280,
+            "x": 0,
+            "y": 0
+        },
+        {
+            "fileName": "maps/lostcore/start.tmx",
+            "height": 480,
+            "width": 640,
+            "x": -120,
+            "y": 480
+        },
+        {
+            "fileName": "maps/lostcore/room2.tmx",
+            "height": 480,
+            "width": 960,
+            "x": 1280,
+            "y": 0
+        }
+    ],
+    "onlyShowAdjacentMaps": false,
+    "type": "world"
+}

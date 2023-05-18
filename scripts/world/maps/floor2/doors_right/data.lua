@@ -1,7 +1,7 @@
 return {
   version = "1.10",
   luaversion = "5.1",
-  tiledversion = "1.10.1",
+  tiledversion = "1.10.0",
   class = "",
   orientation = "orthogonal",
   renderorder = "right-down",
@@ -10,7 +10,7 @@ return {
   tilewidth = 40,
   tileheight = 40,
   nextlayerid = 5,
-  nextobjectid = 23,
+  nextobjectid = 25,
   properties = {
     ["music"] = "deltarune/castletown"
   },
@@ -249,6 +249,19 @@ return {
             ["text1"] = "* NOTE: [wait:5]This room was designed so people can add doors to different areas or rooms.",
             ["text2"] = "* Feel free to add any doors you want here! ^^[wait:5]\n- J.A.R.U."
           }
+        },
+        {
+          id = 23,
+          name = "hisdoor",
+          type = "",
+          shape = "rectangle",
+          x = 1764.23,
+          y = 144.905,
+          width = 72,
+          height = 98,
+          rotation = 0,
+          visible = true,
+          properties = {}
         }
       }
     },
@@ -298,6 +311,19 @@ return {
           type = "",
           shape = "point",
           x = 480,
+          y = 280,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 24,
+          name = "entry_lost",
+          type = "",
+          shape = "point",
+          x = 1800,
           y = 280,
           width = 0,
           height = 0,
