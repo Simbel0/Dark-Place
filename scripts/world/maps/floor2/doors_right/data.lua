@@ -1,7 +1,8 @@
 return {
-  version = "1.4",
+  version = "1.10",
   luaversion = "5.1",
-  tiledversion = "1.4.3",
+  tiledversion = "1.10.0",
+  class = "",
   orientation = "orthogonal",
   renderorder = "right-down",
   width = 48,
@@ -9,7 +10,7 @@ return {
   tilewidth = 40,
   tileheight = 40,
   nextlayerid = 5,
-  nextobjectid = 26,
+  nextobjectid = 29,
   properties = {
     ["border"] = "castle",
     ["music"] = "deltarune/castletown"
@@ -31,10 +32,13 @@ return {
       height = 12,
       id = 1,
       name = "Tile Layer 1",
+      class = "",
       visible = true,
       opacity = 1,
       offsetx = 0,
       offsety = 0,
+      parallaxx = 1,
+      parallaxy = 1,
       properties = {},
       encoding = "lua",
       data = {
@@ -57,10 +61,13 @@ return {
       draworder = "topdown",
       id = 2,
       name = "collision",
+      class = "",
       visible = true,
       opacity = 1,
       offsetx = 0,
       offsety = 0,
+      parallaxx = 1,
+      parallaxy = 1,
       properties = {},
       objects = {
         {
@@ -148,10 +155,13 @@ return {
       draworder = "topdown",
       id = 5,
       name = "objects_doors",
+      class = "",
       visible = true,
       opacity = 1,
       offsetx = 0,
       offsety = 0,
+      parallaxx = 1,
+      parallaxy = 1,
       properties = {},
       objects = {
         {
@@ -205,6 +215,19 @@ return {
           rotation = 0,
           visible = true,
           properties = {}
+        },
+        {
+          id = 27,
+          name = "hisdoor",
+          type = "",
+          shape = "rectangle",
+          x = 1765,
+          y = 145,
+          width = 72,
+          height = 94,
+          rotation = 0,
+          visible = true,
+          properties = {}
         }
       }
     },
@@ -213,10 +236,13 @@ return {
       draworder = "topdown",
       id = 3,
       name = "objects",
+      class = "",
       visible = true,
       opacity = 1,
       offsetx = 0,
       offsety = 0,
+      parallaxx = 1,
+      parallaxy = 1,
       properties = {},
       objects = {
         {
@@ -290,10 +316,13 @@ return {
       draworder = "topdown",
       id = 4,
       name = "markers",
+      class = "",
       visible = true,
       opacity = 1,
       offsetx = 0,
       offsety = 0,
+      parallaxx = 1,
+      parallaxy = 1,
       properties = {},
       objects = {
         {
@@ -342,6 +371,19 @@ return {
           shape = "point",
           x = 1820,
           y = 440,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 28,
+          name = "entry_lost",
+          type = "",
+          shape = "point",
+          x = 1800,
+          y = 280,
           width = 0,
           height = 0,
           rotation = 0,
