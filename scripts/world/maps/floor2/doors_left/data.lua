@@ -10,8 +10,11 @@ return {
   tilewidth = 40,
   tileheight = 40,
   nextlayerid = 5,
-  nextobjectid = 10,
-  properties = {},
+  nextobjectid = 23,
+  properties = {
+    ["border"] = "castle",
+    ["music"] = "deltarune/castletown"
+  },
   tilesets = {
     {
       name = "castle_1f",
@@ -45,7 +48,7 @@ return {
         0, 3, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 5, 0,
         0, 3, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 38, 39, 5, 0,
         0, 19, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 21, 0,
-        0, 70, 73, 73, 86, 82, 82, 87, 73, 73, 86, 82, 82, 87, 73, 73, 86, 82, 82, 87, 73, 73, 86, 82, 82, 87, 73, 73, 86, 82, 82, 87, 73, 73, 86, 82, 82, 87, 73, 73, 86, 82, 82, 87, 73, 73, 71, 0,
+        0, 70, 86, 82, 82, 87, 73, 73, 86, 82, 82, 87, 73, 73, 86, 82, 82, 87, 73, 73, 86, 82, 82, 87, 73, 73, 86, 82, 82, 87, 73, 73, 86, 82, 82, 87, 73, 73, 86, 82, 82, 87, 73, 73, 73, 73, 71, 0,
         0, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 0,
         0, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 0,
         0, 82, 82, 82, 85, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 83, 82, 82, 82, 0,
@@ -98,9 +101,9 @@ return {
           name = "",
           type = "",
           shape = "rectangle",
-          x = 40,
+          x = 1400,
           y = 200,
-          width = 1840,
+          width = 480,
           height = 40,
           rotation = 0,
           visible = true,
@@ -115,6 +118,61 @@ return {
           y = 240,
           width = 40,
           height = 240,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 18,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 40,
+          y = 200,
+          width = 1280,
+          height = 40,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        }
+      }
+    },
+    {
+      type = "objectgroup",
+      draworder = "topdown",
+      id = 5,
+      name = "objects_doors",
+      class = "",
+      visible = true,
+      opacity = 1,
+      offsetx = 0,
+      offsety = 0,
+      parallaxx = 1,
+      parallaxy = 1,
+      properties = {},
+      objects = {
+        {
+          id = 22,
+          name = "bordoor",
+          type = "",
+          shape = "rectangle",
+          x = 1518,
+          y = 94.0107,
+          width = 164,
+          height = 146,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 23,
+          name = "lancerdoor",
+          type = "",
+          shape = "rectangle",
+          x = 1292,
+          y = 88,
+          width = 134,
+          height = 182,
           rotation = 0,
           visible = true,
           properties = {}
@@ -179,6 +237,68 @@ return {
           rotation = 0,
           visible = true,
           properties = {}
+        },
+        {
+          id = 13,
+          name = "bordoor",
+          type = "",
+          shape = "rectangle",
+          x = 1518,
+          y = 94.0107,
+          width = 164,
+          height = 146,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 15,
+          name = "interactable",
+          type = "",
+          shape = "rectangle",
+          x = 1518,
+          y = 95,
+          width = 164,
+          height = 146,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["cutscene"] = "floor2.bordoor",
+            ["once"] = false,
+            ["solid"] = false
+          }
+        },
+        {
+          id = 19,
+          name = "transition",
+          type = "",
+          shape = "rectangle",
+          x = 1313,
+          y = 214,
+          width = 93,
+          height = 26.6667,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["map"] = "floor2/lancer",
+            ["marker"] = "entry"
+          }
+        },
+        {
+          id = 20,
+          name = "script",
+          type = "",
+          shape = "rectangle",
+          x = 1313,
+          y = 205,
+          width = 93,
+          height = 35,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["once"] = false,
+            ["script"] = "lancer_enter"
+          }
         }
       }
     },
@@ -216,6 +336,32 @@ return {
           shape = "point",
           x = 960,
           y = 320,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 14,
+          name = "exit_bor",
+          type = "",
+          shape = "point",
+          x = 1600,
+          y = 280,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 22,
+          name = "entry_lancer",
+          type = "",
+          shape = "point",
+          x = 1360,
+          y = 290,
           width = 0,
           height = 0,
           rotation = 0,

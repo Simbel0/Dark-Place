@@ -12,7 +12,7 @@ function Mod:init()
     self.chars = {}
     self.chars['YOU'] = {"disappointed", "fell", "shoutoutstosimpleflips", "date", "date_flowey_4", "riot"}
     self.chars['susie'] = {"pose", "away_hand", "turn_around", "angry_down", "diagonal_kick_left_5", "shock_right"}
-    self.chars['dess'] = {"reddit_gold"}
+    self.chars['dess'] = {"reddit_gold", "sonic_adventure", "bup", "beatbox", "angreh", "oc", "paneton"}
     self.chars['kris'] = {"pose", "peace", "t_pose", "sit"}
     self.chars['berdly'] = {"fall", "nerd", "drama", "shocked", "fell"}
     self.chars['bor'] = {"pizza", "pizza_b", "kirby"}
@@ -25,7 +25,7 @@ function Mod:init()
         if hour >= 21 or hour <= 8 then
             self.chars_npcs['velvetspam'] = {"pissed", "bundled", "pipis"}
         else
-            self.chars_npcs['velvetspam'] = {"day_blankie", "box"}
+            self.chars_npcs['velvetspam'] = {"day_blankie", "day_blankie_hug", "box"}
         end
     --self.chars_npcs[''] = {""}
 
@@ -49,13 +49,28 @@ function Mod:postInit(new_file)
         Game:setFlag("fun", love.math.random(1, 100))
         Game:setFlag("party", {"YOU", "susie"})
 
-        if Game:hasPartyMember("YOU") then
-            Game.world:startCutscene("room1", "react_to_YOU")
-        end
+        Game.world:startCutscene("_main", "introcutscene")
     end
 
     Game.isOmori = false
+    Game:setFlag("timesUsedWrongBorDoorCode", 0)
+    Game:setFlag("BorDoorCodeUnlocked", false)
+    Game.susieWarnedPlayerAboutBorDoorCode = false
 
+    Game:setFlag("cloudwebStoryFlag", 0)
+
+
+
+    Game:setFlag("vesselChosen", 0)
+
+end
+
+function Mod:onMapMusic(map, music)
+    if Game:getFlag("cloudwebStoryFlag") == 1 and music == "cloudwebs" and map.id == "cloudwebs/cloudwebs_entrance" then
+        return ""
+    else
+        return music
+    end
 end
 
 function Mod:preUpdate(dt)
@@ -77,7 +92,8 @@ function Mod:postUpdate()
     local player = Game.party[1]
 
     if Input.pressed("v", false) and Game.state == "OVERWORLD" and Game.world.menu == nil and not Game.world:hasCutscene() then
-        if player:checkArmor("pizza_toque") then
+        local player_name = (player_name_override or Game.save_name):upper()
+        if player:checkArmor("pizza_toque") or player_name == "PEPPINO" then
             if self.taunt_timer == 0 then
                 self.taunt_timer = 0.40
 				
@@ -137,26 +153,58 @@ function Mod:postUpdate()
         end
     end
     self.taunt_timer = Utils.approach(self.taunt_timer, 0, DT)
-end
 
-modRequire("scripts/main/warp_bin")
-modRequire("scripts/main/debugsystem")
-
-function Mod:getPartyMemberIfInParty(chara)
-    return Game:hasPartyMember(chara) and Game:getPartyMember(chara) or nil
-end
-
-function Mod:getKris()
-    local YOU = Game:getPartyMember("YOU")
-    local kris = Game:getPartyMember("kris")
-    if Game:hasPartyMember(YOU) then return YOU
-    elseif Game:hasPartyMember(kris) then return kris
-    else return Game:getPartyMember(Game.party[1].id)
+    if Game.save_name == "MERG" then
+        for k, v in ipairs(Game.party) do
+           if v.health > 1 then
+              v.health = 1
+           end
+           if v.stats.health ~= 1 then
+              v.stats.health = 1
+           end
+        end
+        if Game.battle and Game.battle.soul and not Game.gameover then
+           for k, v in ipairs(Game.battle.party) do
+              if v.chara:getHealth() < v.chara:getStat("health") then
+                 Game:gameOver(Game.battle.soul:getScreenPos())
+                 break
+                end
+            end
+        end
     end
 end
 
-function Mod:getKrisCharacter()
-    return Game.world:getCharacter(Mod:getKris().id)
+modRequire("scripts/main/warp_bin")
+modRequire("scripts/main/bordoor")
+modRequire("scripts/main/debugsystem")
+
+--- Returns a class of the leader of the party, either the Actor, Character or PartyMember ones
+---@param class? string Either "character", "chara", "sprite", "actorsprite" or "actor". Will changes what class the function returns
+---@return leader class A class from the leader. PartyMember by default, Character, ActorSprite or Actor is specified by the argument class
+function Mod:getLeader(class)
+    local leader = Game.party[1]
+    if class then
+        if class:lower() == "character" or class:lower() == "chara" then
+            return Game.world:getCharacter(leader.id)
+        elseif class:lower() == "sprite" or class:lower() == "actorsprite" then
+            return Game.world:getCharacter(leader.id).sprite
+        elseif class:lower() == "actor" then
+            return leader.actor
+        end
+    end
+    return leader
+end
+
+function Mod:onFootstep(char, num)
+    if Game:getFlag("footsteps", false) then
+        if (char == Game.world.player) then
+            if num == 1 then
+                Assets.playSound("step1")
+            elseif num == 2 then
+                Assets.playSound("step2")
+            end
+        end
+    end
 end
 
 function Mod:isInRematchMode()

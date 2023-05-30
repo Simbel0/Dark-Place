@@ -1,7 +1,7 @@
 return {
   version = "1.10",
   luaversion = "5.1",
-  tiledversion = "1.10.1",
+  tiledversion = "1.10.0",
   class = "",
   orientation = "orthogonal",
   renderorder = "right-down",
@@ -10,8 +10,9 @@ return {
   tilewidth = 40,
   tileheight = 40,
   nextlayerid = 9,
-  nextobjectid = 48,
+  nextobjectid = 53,
   properties = {
+    ["border"] = "castle",
     ["music"] = "deltarune/castletown",
     ["name"] = "Floor 2 - Lounge"
   },
@@ -42,10 +43,10 @@ return {
       properties = {},
       encoding = "lua",
       data = {
-        55, 55, 55, 55, 55, 55, 55, 88, 89, 89, 89, 89, 89, 90, 55, 55, 55, 55, 55, 55, 55,
-        55, 55, 55, 55, 55, 55, 55, 3, 22, 54, 54, 54, 54, 18, 55, 55, 55, 55, 55, 55, 55,
-        88, 89, 89, 89, 89, 89, 90, 2, 54, 54, 54, 54, 6, 5, 88, 89, 89, 89, 89, 89, 89,
-        54, 54, 54, 54, 54, 34, 5, 35, 20, 20, 20, 20, 20, 37, 3, 54, 22, 54, 54, 54, 54,
+        55, 55, 55, 55, 55, 55, 55, 88, 99, 100, 101, 102, 103, 90, 55, 55, 55, 55, 55, 55, 55,
+        55, 55, 55, 55, 55, 55, 55, 3, 91, 92, 93, 94, 95, 18, 55, 55, 55, 55, 55, 55, 55,
+        88, 89, 89, 89, 89, 89, 90, 2, 107, 108, 109, 110, 111, 5, 88, 89, 89, 89, 89, 89, 89,
+        54, 54, 54, 54, 54, 34, 5, 35, 123, 124, 125, 126, 127, 37, 3, 54, 22, 54, 54, 54, 54,
         12, 13, 14, 15, 16, 54, 5, 70, 73, 86, 84, 87, 73, 71, 2, 54, 12, 13, 14, 15, 16,
         28, 29, 30, 31, 32, 22, 18, 82, 66, 82, 82, 82, 82, 82, 3, 54, 28, 29, 30, 31, 32,
         54, 45, 46, 47, 38, 39, 5, 82, 82, 82, 82, 82, 82, 82, 3, 38, 39, 45, 46, 47, 4,
@@ -200,9 +201,9 @@ return {
           type = "",
           shape = "rectangle",
           x = 378,
-          y = 160,
+          y = 140,
           width = 84,
-          height = 5,
+          height = 20,
           rotation = 0,
           visible = true,
           properties = {
@@ -238,7 +239,7 @@ return {
         },
         {
           id = 29,
-          name = "",
+          name = "transition",
           type = "",
           shape = "rectangle",
           x = 840,
@@ -247,7 +248,10 @@ return {
           height = 160,
           rotation = 0,
           visible = true,
-          properties = {}
+          properties = {
+            ["map"] = "floor2/east_wing",
+            ["marker"] = "entry"
+          }
         },
         {
           id = 32,
@@ -293,6 +297,78 @@ return {
           rotation = 0,
           visible = true,
           properties = {}
+        },
+        {
+          id = 49,
+          name = "sprite",
+          type = "",
+          shape = "rectangle",
+          x = 208,
+          y = 160,
+          width = 25,
+          height = 40,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["scalex"] = 2,
+            ["scaley"] = 2,
+            ["speed"] = 0.25,
+            ["texture"] = "objects/torch/torch"
+          }
+        },
+        {
+          id = 50,
+          name = "sprite",
+          type = "",
+          shape = "rectangle",
+          x = 328,
+          y = 40,
+          width = 25,
+          height = 40,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["scalex"] = 2,
+            ["scaley"] = 2,
+            ["speed"] = 0.25,
+            ["texture"] = "objects/torch/torch"
+          }
+        },
+        {
+          id = 51,
+          name = "sprite",
+          type = "",
+          shape = "rectangle",
+          x = 488,
+          y = 40,
+          width = 25,
+          height = 40,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["scalex"] = 2,
+            ["scaley"] = 2,
+            ["speed"] = 0.25,
+            ["texture"] = "objects/torch/torch"
+          }
+        },
+        {
+          id = 52,
+          name = "sprite",
+          type = "",
+          shape = "rectangle",
+          x = 608,
+          y = 160,
+          width = 25,
+          height = 40,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["scalex"] = 2,
+            ["scaley"] = 2,
+            ["speed"] = 0.25,
+            ["texture"] = "objects/torch/torch"
+          }
         }
       }
     },
@@ -343,6 +419,19 @@ return {
           shape = "point",
           x = 100,
           y = 360,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 48,
+          name = "entry_east",
+          type = "",
+          shape = "point",
+          x = 800,
+          y = 400,
           width = 0,
           height = 0,
           rotation = 0,

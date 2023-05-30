@@ -216,62 +216,88 @@ function Lib:init()
 			end
 		end
 	end)
-	
-	Utils.hook(AttackBox, 'update', function(orig, self, ...)
-      if #Game.battle.party <= 3 then return orig(self, ...) end
-		
-      if Game.battle.cancel_attack then
-          self.fade_rect.alpha = Utils.approach(self.fade_rect.alpha, 1, DTMULT/20)
-      end
 
-      if not self.attacked then
-          self.bolt:move(-AttackBox.BOLTSPEED * DTMULT, 0)
+	if not Mod.libs["ExpandedAttackLib"] then -- Compatability with 'ExpandedAttackLib' Library.
+      Utils.hook(AttackBox, 'update', function(orig, self, ...)
+         if #Game.battle.party <= 3 then return orig(self, ...) end
+         
+         if Game.battle.cancel_attack then
+             self.fade_rect.alpha = Utils.approach(self.fade_rect.alpha, 1, DTMULT/20)
+         end
 
-          self.afterimage_timer = self.afterimage_timer + DTMULT/2
-          while math.floor(self.afterimage_timer) > self.afterimage_count do
-              self.afterimage_count = self.afterimage_count + 1
-              local afterimg = AttackBar(self.bolt_start_x - (self.afterimage_count * AttackBox.BOLTSPEED * 2), 0, 6, self.realHeight)
-              afterimg.layer = 3
-              afterimg.alpha = 0.4
-              afterimg:fadeOutSpeedAndRemove()
-              self:addChild(afterimg)
-          end
-      end
+         if not self.attacked then
+             self.bolt:move(-AttackBox.BOLTSPEED * DTMULT, 0)
 
-      if not Game.battle.cancel_attack and Input.pressed("confirm") then
-          self.flash = 1
-      else
-          self.flash = Utils.approach(self.flash, 0, DTMULT/5)
-      end
+             self.afterimage_timer = self.afterimage_timer + DTMULT/2
+             while math.floor(self.afterimage_timer) > self.afterimage_count do
+                 self.afterimage_count = self.afterimage_count + 1
+                 local afterimg = AttackBar(self.bolt_start_x - (self.afterimage_count * AttackBox.BOLTSPEED * 2), 0, 6, self.realHeight)
+                 afterimg.layer = 3
+                 afterimg.alpha = 0.4
+                 afterimg:fadeOutSpeedAndRemove()
+                 self:addChild(afterimg)
+             end
+         end
 
-      Object.update(self)
-	end)
-	
-	Utils.hook(AttackBox, 'draw', function(orig, self, ...)
-		if #Game.party <= 3 then orig(self, ...) return end
-		
-		local target_color = {self.battler.chara:getAttackBarColor()}
-		local box_color = {self.battler.chara:getAttackBoxColor()}
+         if not Game.battle.cancel_attack and Input.pressed("confirm") then
+             self.flash = 1
+         else
+             self.flash = Utils.approach(self.flash, 0, DTMULT/5)
+         end
 
-		if self.flash > 0 then
-			box_color = Utils.lerp(box_color, {1, 1, 1}, self.flash)
-		end
+         Object.update(self)
+      end)
+      
+      Utils.hook(AttackBox, 'draw', function(orig, self, ...)
+         if #Game.party <= 3 then orig(self, ...) return end
+         
+         local target_color = {self.battler.chara:getAttackBarColor()}
+         local box_color = {self.battler.chara:getAttackBoxColor()}
 
-		love.graphics.setLineWidth(2)
-		love.graphics.setLineStyle("rough")
+         if self.flash > 0 then
+            box_color = Utils.lerp(box_color, {1, 1, 1}, self.flash)
+         end
 
-		local h = (self.realHeight or 38) - 2
-		
-		love.graphics.setColor(box_color)
-		love.graphics.rectangle("line", 80, 1, (15 * AttackBox.BOLTSPEED) + 3, h)
-		love.graphics.setColor(target_color)
-		love.graphics.rectangle("line", 83, 1, 8, h)
+         love.graphics.setLineWidth(2)
+         love.graphics.setLineStyle("rough")
 
-		love.graphics.setLineWidth(1)
+         local h = (self.realHeight or 38) - 2
+         
+         love.graphics.setColor(box_color)
+         love.graphics.rectangle("line", 80, 1, (15 * AttackBox.BOLTSPEED) + 3, h)
+         love.graphics.setColor(target_color)
+         love.graphics.rectangle("line", 83, 1, 8, h)
 
-		Object.draw(self)
-	end)
-	
+         love.graphics.setLineWidth(1)
+
+         Object.draw(self)
+      end)
+      
+      Utils.hook(BattleUI, "beginAttack", function(orig, self, ...)
+         orig(self, ...)
+         
+         if #Game.party <= 3 then return end
+         
+         local h = (115 / #Game.battle.party)
+         
+         for k,v in ipairs(self.attack_boxes) do
+            v.head_sprite.height = h + 4
+            v.bolt.height = h
+            v.fade_rect.height = v.bolt.height
+            v.realHeight = v.bolt.height
+            local b
+            local name = Game:getPartyMember(v.battler.chara.id)
+            for i, z in ipairs(Game.party) do
+              if z == name then
+                b = i
+                break -- break out of the loop once a match is found
+              end
+            end
+            v.y = 40 + (h * (b - 1))
+         end
+      end)
+   end
+   
 	Utils.hook(BattleUI, "drawState", function(orig, self, ...)
 		if #Game.party <= 3 then return orig(self, ...) end
 		
@@ -293,39 +319,12 @@ function Lib:init()
 		end
 	end)
 	
-	Utils.hook(BattleUI, "beginAttack", function(orig, self, ...)
-		orig(self, ...)
-		
-		if #Game.party <= 3 then return end
-		
-		local h = (115 / #Game.battle.party)
-		
-		for k,v in ipairs(self.attack_boxes) do
-			-- v.head_sprite:remove()
-         v.head_sprite.height = h + 4
-			v.bolt.height = h
-			v.fade_rect.height = v.bolt.height
-			v.realHeight = v.bolt.height
-         local b
-         local name = Game:getPartyMember(v.battler.chara.id)
-         for i, z in ipairs(Game.party) do
-           if z == name then
-             b = i
-             break -- break out of the loop once a match is found
-           end
-         end
-			-- v:setScale(scale)
-			v.y = 40 + (h * (b - 1))
-		end
-	end)
-	
 	Utils.hook(BattleUI, "init", function(orig, self, ...)
 		orig(self, ...)
 		
 		if #Game.party <= 3 then return end
 		
 		local x = 0
-		-- local w = ((108 * .5) + 212) * 2
 		local realW = ((SCREEN_WIDTH - 1) / #Game.party)
 		
 		for k,v in ipairs(self.action_boxes) do
@@ -409,7 +408,7 @@ function Lib:init()
       
 		local x = 0
 		-- local w = ((108 * .5) + 212) * 2
-		local realW = (SCREEN_WIDTH / #Game.party)
+		local realW = ((SCREEN_WIDTH - 1) / #Game.party)
 		
 		for k,v in ipairs(parent.action_boxes) do
 			v.x = x
@@ -493,303 +492,8 @@ function Lib:init()
 
 		Object.draw(self)
 	end)
-   
-   Utils.hook(Shop, 'draw', function(orig, self)
-		if #Game.party <= 3 then orig(self) return end
-      
-      self:drawBackground()
-
-      Object.draw(self)
-
-      love.graphics.setFont(self.font)
-      if self.state == "MAINMENU" then
-          love.graphics.setColor(COLORS.white)
-          for i = 1, #self.menu_options do
-              love.graphics.print(self.menu_options[i][1], 480, 220 + (i * 40))
-          end
-          love.graphics.setColor(Game:getSoulColor())
-          love.graphics.draw(self.heart_sprite, 450, 230 + (self.main_current_selecting * 40))
-      elseif self.state == "BUYMENU" then
-
-          while self.current_selecting - self.item_offset > 5 do
-              self.item_offset = self.item_offset + 1
-          end
-
-          while self.current_selecting - self.item_offset < 1 do
-              self.item_offset = self.item_offset - 1
-          end
-
-          if self.item_offset + 5 > #self.items + 1 then
-              if #self.items + 1 > 5 then
-                  self.item_offset = self.item_offset - 1
-              end
-          end
-
-          if #self.items + 1 == 5 then
-              self.item_offset = 0
-          end
-
-          -- Item type (item, key, weapon, armor)
-          for i = 1 + self.item_offset, self.item_offset + math.max(4, math.min(5, #self.items)) do
-              if i == math.max(4, #self.items) + 1 then break end
-              local y = 220 + ((i - self.item_offset) * 40)
-              local item = self.items[i]
-              if not item then
-                  -- If the item is null, add some empty space
-                  love.graphics.setColor(COLORS.dkgray)
-                  love.graphics.print("--------", 60, y)
-              elseif item.options["stock"] and (item.options["stock"] <= 0) then
-                  -- If we've depleted the stock, show a "sold out" message
-                  love.graphics.setColor(COLORS.gray)
-                  love.graphics.print("--SOLD OUT--", 60, y)
-              else
-                  love.graphics.setColor(item.options["color"])
-                  love.graphics.print(item.options["name"], 60, y)
-                  if not self.hide_price then
-                      love.graphics.setColor(COLORS.white)
-                      love.graphics.print(string.format(self.currency_text, item.options["price"] or 0), 60 + 240, y)
-                  end
-              end
-          end
-          love.graphics.setColor(COLORS.white)
-          if self.item_offset == math.max(4, #self.items) - 4 then
-              love.graphics.print("Exit", 60, 220 + (math.max(4, #self.items) + 1 - self.item_offset) * 40)
-          end
-          love.graphics.setColor(Game:getSoulColor())
-          if not self.buy_confirming then
-              love.graphics.draw(self.heart_sprite, 30, 230 + ((self.current_selecting - self.item_offset) * 40))
-          else
-              love.graphics.draw(self.heart_sprite, 30 + 420, 230 + 80 + 10 + (self.current_selecting_choice * 30))
-              love.graphics.setColor(COLORS.white)
-              local lines = Utils.split(string.format(self.buy_confirmation_text, string.format(self.currency_text, self.items[self.current_selecting].options["price"] or 0)), "\n")
-              for i = 1, #lines do
-                  love.graphics.print(lines[i], 60 + 400, 420 - 160 + ((i - 1) * 30))
-              end
-              love.graphics.print("Yes", 60 + 420, 420 - 80)
-              love.graphics.print("No",  60 + 420, 420 - 80 + 30)
-          end
-          love.graphics.setColor(COLORS.white)
-
-          if (self.current_selecting <= #self.items) then
-              local current_item = self.items[self.current_selecting]
-              local box_left, box_top = self.info_box:getBorder()
-
-              local left = self.info_box.x - self.info_box.width - (box_left / 2) * 1.5
-              local top = self.info_box.y - self.info_box.height - (box_top / 2) * 1.5
-              local width = self.info_box.width + box_left * 1.5
-              local height = self.info_box.height + box_top * 1.5
-
-              Draw.pushScissor()
-              Draw.scissor(left, top, width, height)
-
-              love.graphics.setColor(COLORS.white)
-              love.graphics.print(current_item.options["description"], left + 32, top + 20)
-
-              if current_item.item.type == "armor" or current_item.item.type == "weapon" then
-                  for i = 1, #Game.party do
-                      local offset_x = 0
-                      local offset_y = 0
-                      -- TODO: more than 3 party member support (Now supports 4)
-                      if i == 1 then
-                          offset_x = 0
-                          offset_y = 0
-                      elseif i == 2 then
-                          offset_x = 100
-                          offset_y = 0
-                      elseif i == 3 then
-                          offset_x = 0
-                          offset_y = 45
-                      elseif i == 4 then
-                          offset_x = 100
-                          offset_y = 45
-                      end
-                      local party_member = Game.party[i]
-                      local can_equip = party_member:canEquip(current_item.item)
-                      local head_path = ""
-
-                      love.graphics.setFont(self.plain_font)
-                      love.graphics.setColor(COLORS.white)
-
-                      if can_equip then
-                          head_path = Assets.getTexture(party_member:getHeadIcons() .. "/head")
-                          if current_item.item.type == "armor" then
-                              love.graphics.draw(self.stat_icons["defense_1"], offset_x + 470, offset_y + 127 + top)
-                              love.graphics.draw(self.stat_icons["defense_2"], offset_x + 470, offset_y + 147 + top)
-
-                              for j = 1, 2 do
-                                  self:drawBonuses(party_member, party_member:getArmor(j), current_item.options["bonuses"], "defense", offset_x + 470 + 21, offset_y + 127 + ((j - 1) * 20) + top)
-                              end
-
-                          elseif current_item.item.type == "weapon" then
-                              love.graphics.draw(self.stat_icons["attack"], offset_x + 470, offset_y + 127 + top)
-                              love.graphics.draw(self.stat_icons["magic" ], offset_x + 470, offset_y + 147 + top)
-                              self:drawBonuses(party_member, party_member:getWeapon(), current_item.options["bonuses"], "attack", offset_x + 470 + 21, offset_y + 127 + top)
-                              self:drawBonuses(party_member, party_member:getWeapon(), current_item.options["bonuses"], "magic",  offset_x + 470 + 21, offset_y + 147 + top)
-                          end
-                      else
-                          head_path = Assets.getTexture(party_member:getHeadIcons() .. "/head_error")
-                      end
-
-                      love.graphics.draw(head_path, offset_x + 426, offset_y + 132 + top)
-                  end
-              end
-
-              Draw.popScissor()
-
-              love.graphics.setColor(COLORS.white)
-
-              if not self.hide_storage_text then
-                  love.graphics.setFont(self.plain_font)
-
-                  local current_storage = Game.inventory:getDefaultStorage(current_item.item)
-                  local space = Game.inventory:getFreeSpace(current_storage)
-
-                  if space <= 0 then
-                      love.graphics.print("NO SPACE", 521, 430)
-                  else
-                      love.graphics.print("Space:" .. space, 521, 430)
-                  end
-              end
-          end
-      elseif self.state == "SELLMENU" then
-          love.graphics.setColor(Game:getSoulColor())
-          love.graphics.draw(self.heart_sprite, 50, 230 + (self.sell_current_selecting * 40))
-          love.graphics.setColor(COLORS.white)
-          love.graphics.setFont(self.font)
-          for i, v in ipairs(self.sell_options) do
-              love.graphics.print(v[1], 80, 220 + (i * 40))
-          end
-          love.graphics.print("Return", 80, 220 + ((#self.sell_options + 1) * 40))
-      elseif self.state == "SELLING" then
-          if self.item_current_selecting - self.item_offset > 5 then
-              self.item_offset = self.item_offset + 1
-          end
-
-          if self.item_current_selecting - self.item_offset < 1 then
-              self.item_offset = self.item_offset - 1
-          end
-
-          local inventory = Game.inventory:getStorage(self.state_reason[2])
-
-          if inventory and inventory.sorted then
-              if self.item_offset + 5 > #inventory then
-                  if #inventory > 5 then
-                      self.item_offset = self.item_offset - 1
-                  end
-              end
-              if #inventory == 5 then
-                  self.item_offset = 0
-              end
-          end
-
-          love.graphics.setColor(Game:getSoulColor())
-
-          love.graphics.draw(self.heart_sprite, 30, 230 + ((self.item_current_selecting - self.item_offset) * 40))
-          if self.sell_confirming then
-              love.graphics.draw(self.heart_sprite, 30 + 420, 230 + 80 + 10 + (self.current_selecting_choice * 30))
-              love.graphics.setColor(COLORS.white)
-              local lines = Utils.split(string.format(self.sell_confirmation_text, string.format(self.currency_text, inventory[self.item_current_selecting]:getSellPrice())), "\n")
-              for i = 1, #lines do
-                  love.graphics.print(lines[i], 60 + 400, 420 - 160 + ((i - 1) * 30))
-              end
-              love.graphics.print("Yes", 60 + 420, 420 - 80)
-              love.graphics.print("No",  60 + 420, 420 - 80 + 30)
-          end
-
-          love.graphics.setColor(COLORS.white)
-
-          if inventory then
-              for i = 1 + self.item_offset, self.item_offset + math.min(5, inventory.max) do
-                  local item = inventory[i]
-                  love.graphics.setFont(self.font)
-
-                  if item then
-                      love.graphics.setColor(COLORS.white)
-                      love.graphics.print(item:getName(), 60, 220 + ((i - self.item_offset) * 40))
-                      if item:isSellable() then
-                          love.graphics.print(string.format(self.currency_text, item:getSellPrice()), 60 + 240, 220 + ((i - self.item_offset) * 40))
-                      end
-                  else
-                      love.graphics.setColor(COLORS.dkgray)
-                      love.graphics.print("--------", 60, 220 + ((i - self.item_offset) * 40))
-                  end
-              end
-
-              local max = inventory.max
-              if inventory.sorted then
-                  max = #inventory
-              end
-
-              love.graphics.setColor(COLORS.white)
-
-              if max > 5 then
-
-                  for i = 1, max do
-                      local percentage = (i - 1) / (max - 1)
-                      local height = 129
-
-                      local draw_location = percentage * height
-
-                      local tocheck = self.item_current_selecting
-                      if self.sell_confirming then
-                          tocheck = self.current_selecting_choice
-                      end
-
-                      if i == tocheck then
-                          love.graphics.rectangle("fill", 372, 292 + draw_location, 9, 9)
-                      elseif inventory.sorted then
-                          love.graphics.rectangle("fill", 372 + 3, 292 + 3 + draw_location, 3, 3)
-                      end
-                  end
-
-                  -- Draw arrows
-                  if not self.sell_confirming then
-                      local sine_off = math.sin((Kristal.getTime()*30)/6) * 3
-                      if self.item_offset + 4 < (max - 1) then
-                          love.graphics.draw(self.arrow_sprite, 370, 149 + sine_off + 291)
-                      end
-                      if self.item_offset > 0 then
-                          love.graphics.draw(self.arrow_sprite, 370, 14 - sine_off + 291 - 25, 0, 1, -1)
-                      end
-                  end
-              end
-          else
-              love.graphics.print("Invalid storage", 60, 220 + (1 * 40))
-          end
-      elseif self.state == "TALKMENU" then
-          love.graphics.setColor(Game:getSoulColor())
-          love.graphics.draw(self.heart_sprite, 50, 230 + (self.current_selecting * 40))
-          love.graphics.setColor(COLORS.white)
-          love.graphics.setFont(self.font)
-          for i = 1, math.max(4, #self.talks) do
-              local v = self.talks[i]
-              if v then
-                  love.graphics.setColor(v[2].color)
-                  love.graphics.print(v[1], 80, 220 + (i * 40))
-              else
-                  love.graphics.setColor(COLORS.dkgray)
-                  love.graphics.print("--------", 80, 220 + (i * 40))
-              end
-          end
-          love.graphics.setColor(COLORS.white)
-          love.graphics.print("Exit", 80, 220 + ((math.max(4, #self.talks) + 1) * 40))
-      end
-
-      if self.state == "MAINMENU" or
-         self.state == "BUYMENU"  or
-         self.state == "SELLMENU" or
-         self.state == "SELLING"  or
-         self.state == "TALKMENU" then
-          love.graphics.setColor(COLORS.white)
-          love.graphics.setFont(self.font)
-          love.graphics.print(string.format(self.currency_text, self:getMoney()), 440, 420)
-      end
-
-      love.graphics.setColor(0, 0, 0, self.fade_alpha)
-      love.graphics.rectangle("fill", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
-     end)
 	
-	print("Loaded MoreParty")
+	print("Loaded MoreParty Library")
 end
 
 return Lib

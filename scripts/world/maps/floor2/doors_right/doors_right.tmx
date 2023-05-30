@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.0" orientation="orthogonal" renderorder="right-down" width="48" height="12" tilewidth="40" tileheight="40" infinite="0" nextlayerid="5" nextobjectid="25">
+<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="48" height="12" tilewidth="40" tileheight="40" infinite="0" nextlayerid="5" nextobjectid="26">
  <editorsettings>
   <export target="data.lua" format="lua"/>
  </editorsettings>
  <properties>
+  <property name="border" value="castle"/>
   <property name="music" value="deltarune/castletown"/>
  </properties>
  <tileset firstgid="1" source="../../../tilesets/castle_1f.tsx"/>
@@ -31,16 +32,25 @@
   <object id="5" x="560" y="200" width="1320" height="40"/>
   <object id="12" x="1880" y="240" width="40" height="240"/>
  </objectgroup>
+ <objectgroup color="#ff0000" id="5" name="objects_doors">
+  <object id="24" name="backroomsdoor" x="204" y="144" width="72" height="94"/>
+  <object id="25" name="queendoor" x="400" y="84" width="160" height="156"/>
+  <object id="24" name="tickdoor" x="625" y="64" width="170" height="174"/>
+  <object id="25" name="patatedoor" x="882" y="64" width="160" height="174"/>
+ </objectgroup>
  <objectgroup color="#ff00ff" id="3" name="objects">
-  <object id="13" name="backroomsdoor" x="204" y="144" width="72" height="94"/>
   <object id="14" name="transition" x="40" y="480" width="120" height="40">
    <properties>
     <property name="map" value="floor2/lounge"/>
     <property name="marker" value="entry_doorsright"/>
    </properties>
   </object>
-  <object id="15" name="transition" x="1760" y="480" width="120" height="40"/>
-  <object id="18" name="queendoor" x="400" y="84" width="160" height="156"/>
+  <object id="15" name="transition" x="1760" y="480" width="120" height="40">
+   <properties>
+    <property name="map" value="floor2/east_wing"/>
+    <property name="marker" value="entry_doorsright"/>
+   </properties>
+  </object>
   <object id="20" name="transition" x="400" y="230" width="160" height="10">
    <properties>
     <property name="map" value="floor2/queen"/>
@@ -54,7 +64,6 @@
 - J.A.R.U.</property>
    </properties>
   </object>
-  <object id="23" name="hisdoor" x="1764.23" y="144.905" width="72" height="98"/>
  </objectgroup>
  <objectgroup color="#7f00ff" id="4" name="markers">
   <object id="16" name="entry" x="100" y="440">
@@ -66,7 +75,7 @@
   <object id="19" name="exit_queen" x="480" y="280">
    <point/>
   </object>
-  <object id="24" name="entry_lost" x="1800" y="280">
+  <object id="23" name="entry2" x="1820" y="440">
    <point/>
   </object>
  </objectgroup>

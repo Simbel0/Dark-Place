@@ -10,7 +10,7 @@ return {
   tilewidth = 40,
   tileheight = 40,
   nextlayerid = 5,
-  nextobjectid = 26,
+  nextobjectid = 28,
   properties = {
     ["music"] = "greenroom"
   },
@@ -389,6 +389,22 @@ return {
           rotation = 0,
           visible = true,
           properties = {}
+        },
+        {
+          id = 26,
+          name = "npc",
+          type = "",
+          shape = "point",
+          x = 460,
+          y = 200,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["actor"] = "char",
+            ["cutscene"] = "devroom.charshop"
+          }
         }
       }
     },
