@@ -19,7 +19,10 @@ function character:init()
 
     self.has_xact = true
     self.xact_name = "Ka-Action"
-	self:addSpell("heal_prayer")
+
+	self:addSpell("angel_blessing")
+    self:addSpell("angel_beam")
+    self:addSpell("nerdattack")
 
     self.health = 100
 
